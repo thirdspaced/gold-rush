@@ -126,30 +126,35 @@ export default function App() {
     }
   }, [playerInfo.logs, gameState]);
 
-  // --- Firebase Initialization ---
+ // --- Firebase Initialization ---
   useEffect(() => {
     try {
-      if (typeof __firebase_config !== 'undefined') {
-        const firebaseConfig = JSON.parse(__firebase_config);
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const firestoreDb = getFirestore(app);
-        setDb(firestoreDb);
+      const firebaseConfig = {
+        apiKey: "AIzaSyDfJNUSJi8YJB_f0009JpxJMOzS8hDVVaQ",
+        authDomain: "gold-rush-a868b.firebaseapp.com",
+        projectId: "gold-rush-a868b",
+        storageBucket: "gold-rush-a868b.firebasestorage.app",
+        messagingSenderId: "241706324430",
+        appId: "1:241706324430:web:bee589ec8d4d74a129db9f"
+      };
 
-        if (typeof __app_id !== 'undefined') setAppId(__app_id);
+      const app = initializeApp(firebaseConfig);
+      const auth = getAuth(app);
+      const firestoreDb = getFirestore(app);
+      setDb(firestoreDb);
+      setAppId('gold-rush-a868b'); 
 
-        const initAuth = async () => {
-          if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-            await signInWithCustomToken(auth, __initial_auth_token);
-          } else {
-            await signInAnonymously(auth);
-          }
-        };
-        initAuth();
+      const initAuth = async () => {
+        try {
+          await signInAnonymously(auth);
+        } catch (error) {
+          console.error("Auth error", error);
+        }
+      };
+      initAuth();
 
-        const unsubscribe = onAuthStateChanged(auth, setUser);
-        return () => unsubscribe();
-      }
+      const unsubscribe = onAuthStateChanged(auth, setUser);
+      return () => unsubscribe();
     } catch (error) {
       console.error("Firebase init error", error);
     }
