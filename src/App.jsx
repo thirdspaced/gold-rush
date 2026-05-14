@@ -291,6 +291,10 @@ export default function App() {
   const [appId, setAppId] = useState('gold-rush-a868b');
   const [saveStatus, setSaveStatus] = useState('');
 
+  // --- Audio State ---
+  const [isMuted, setIsMuted] = useState(false);
+  const audioRef = useRef(null);
+
   // --- Game State ---
   const [gameState, setGameState] = useState('title'); // title, select, wealth, intro, loop, end
   const [playerInfo, setPlayerInfo] = useState({
@@ -310,6 +314,13 @@ export default function App() {
   const [activeNpcEvent, setActiveNpcEvent] = useState(null);
 
   const bottomRef = useRef(null);
+
+  // --- Audio Mute Effect ---
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.muted = isMuted;
+    }
+  }, [isMuted]);
 
   // --- Scroll to Bottom ---
   useEffect(() => {
@@ -410,6 +421,15 @@ export default function App() {
   };
 
   // --- Start Flow ---
+  const startGameAndAudio = () => {
+    setGameState('select');
+    if (audioRef.current) {
+      audioRef.current.play().catch(error => {
+        console.log("Audio play blocked by browser:", error);
+      });
+    }
+  };
+
   const handleSelectCharacter = (id) => {
     setPlayerInfo(prev => ({
       ...prev,
@@ -649,6 +669,9 @@ export default function App() {
       </div>
       <div className="flex flex-wrap justify-center gap-2 sm:gap-4 items-center text-[10px] sm:text-xs md:text-sm">
         <span className="text-gray-400 w-full sm:w-auto text-center">{saveStatus}</span>
+        <button onClick={() => setIsMuted(!isMuted)} className="hover:bg-white hover:text-black px-2 py-1 transition-colors border border-gray-600 sm:border-transparent hover:border-white w-full sm:w-auto">
+          SOUND: {isMuted ? 'OFF' : 'ON'}
+        </button>
         <button onClick={saveGame} className="hover:bg-white hover:text-black px-2 py-1 transition-colors border border-gray-600 sm:border-transparent hover:border-white w-full sm:w-auto">SAVE</button>
         <button onClick={loadGame} className="hover:bg-white hover:text-black px-2 py-1 transition-colors border border-gray-600 sm:border-transparent hover:border-white w-full sm:w-auto">LOAD</button>
       </div>
@@ -664,7 +687,7 @@ export default function App() {
         <p className="text-xs sm:text-sm md:text-lg text-gray-300 px-4">A Historical Adventure in 1849 San Francisco</p>
       </div>
       <button 
-        onClick={() => setGameState('select')}
+        onClick={startGameAndAudio}
         className="text-base sm:text-xl md:text-2xl border-2 border-white px-6 sm:px-8 py-3 sm:py-4 hover:bg-white hover:text-black transition-colors w-[80%] sm:w-auto"
       >
         Press to Start
@@ -895,6 +918,7 @@ export default function App() {
     <>
       <style>{PIXEL_FONT}</style>
       <div className="h-[100dvh] w-full bg-black text-white font-pixel p-1 sm:p-4 md:p-8 selection:bg-white selection:text-black flex flex-col">
+        <audio ref={audioRef} src="/theme.mp3" loop />
         <div className="max-w-5xl mx-auto border-2 sm:border-4 md:border-8 border-gray-800 rounded-lg sm:rounded-3xl p-1 sm:p-2 md:p-4 bg-gray-900 shadow-[0_0_20px_rgba(0,0,0,0.8)] sm:shadow-[0_0_50px_rgba(0,0,0,0.8)] w-full flex-1 flex flex-col min-h-0">
           <div className="flex-1 rounded-md sm:rounded-xl border border-gray-700 bg-black p-2 sm:p-4 md:p-6 flex flex-col relative overflow-hidden min-h-0">
             
