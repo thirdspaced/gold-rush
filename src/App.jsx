@@ -643,7 +643,7 @@ export default function App() {
 
   // --- Render Helpers ---
   const renderHeader = () => (
-    <div className="flex flex-col sm:flex-row justify-between items-center border-b-2 sm:border-b-4 border-white pb-3 sm:pb-4 mb-4 gap-3 sm:gap-0">
+    <div className="shrink-0 flex flex-col sm:flex-row justify-between items-center border-b-2 sm:border-b-4 border-white pb-3 sm:pb-4 mb-4 gap-3 sm:gap-0">
       <div>
         <h1 className="text-lg sm:text-xl md:text-2xl uppercase tracking-widest text-center sm:text-left">GOLD RUSH</h1>
       </div>
@@ -656,7 +656,7 @@ export default function App() {
   );
 
   const renderTitle = () => (
-    <div className="flex flex-col items-center justify-center min-h-[60vh] space-y-8 sm:space-y-12 py-10">
+    <div className="flex flex-col items-center justify-center h-full min-h-0 overflow-y-auto space-y-8 sm:space-y-12 py-10">
       <div className="text-center space-y-4 sm:space-y-6">
         <h2 className="text-3xl sm:text-4xl md:text-6xl border-y-2 sm:border-y-4 border-white py-4 sm:py-6 px-4 sm:px-8 uppercase tracking-widest animate-pulse leading-snug">
           GOLD RUSH
@@ -673,7 +673,7 @@ export default function App() {
   );
 
   const renderSelect = () => (
-    <div className="space-y-4 sm:space-y-6 max-w-4xl mx-auto pb-8">
+    <div className="space-y-4 sm:space-y-6 max-w-4xl mx-auto pb-8 h-full min-h-0 overflow-y-auto">
       <p className="text-sm sm:text-lg md:text-xl mb-4 sm:mb-8 leading-loose px-2">Hundreds of thousands of people traveled to California during the Gold Rush. They came from all over the world to build the city of San Francisco.</p>
       <p className="text-sm sm:text-lg md:text-xl mb-2 sm:mb-4 text-yellow-400 px-2">Choose who you will be:</p>
       
@@ -692,7 +692,7 @@ export default function App() {
   );
 
   const renderWealthRoll = () => (
-    <div className="flex flex-col items-center justify-center min-h-[60vh] space-y-8 sm:space-y-10 py-10 px-2">
+    <div className="flex flex-col items-center justify-center h-full min-h-0 overflow-y-auto space-y-8 sm:space-y-10 py-10 px-2">
       <p className="text-sm sm:text-lg md:text-xl text-center max-w-2xl leading-loose text-blue-300">
         {CHARACTERS[playerInfo.characterId].journey}
       </p>
@@ -710,7 +710,7 @@ export default function App() {
 
   const renderIntro = () => {
     return (
-      <div className="flex flex-col items-center justify-center min-h-[60vh] space-y-6 sm:space-y-8 py-10 px-2">
+      <div className="flex flex-col items-center justify-center h-full min-h-0 overflow-y-auto space-y-6 sm:space-y-8 py-10 px-2">
         <h3 className="text-xl sm:text-2xl text-yellow-400 uppercase text-center">You are {playerInfo.wealthLevel}</h3>
         <div className="max-w-2xl border-2 border-white p-4 sm:p-6 space-y-4 bg-gray-900 w-full">
           <p className="text-xs sm:text-sm md:text-base leading-loose">{playerInfo.logs[0].text}</p>
@@ -793,12 +793,12 @@ export default function App() {
     const isModalOpen = activeStoryEvent || activeNpcEvent;
 
     return (
-      <div className="flex flex-col h-full flex-1 min-h-[60vh] relative">
+      <div className="flex flex-col h-full flex-1 min-h-0 relative">
         {renderStoryModal()}
         {renderNpcModal()}
         
         {/* Top Status Bar */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2 sm:gap-4 mb-4 p-2 sm:p-3 border-2 border-white text-[8px] sm:text-[10px] md:text-xs bg-gray-900 overflow-hidden">
+        <div className="shrink-0 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2 sm:gap-4 mb-4 p-2 sm:p-3 border-2 border-white text-[8px] sm:text-[10px] md:text-xs bg-gray-900 overflow-hidden">
           <div className="text-yellow-400 break-words">Day: {playerInfo.day} / {playerInfo.maxDays}</div>
           <div className="text-green-400 break-words">Money: ${playerInfo.money}</div>
           <div className="text-yellow-200 break-words">Food: {playerInfo.food} lbs</div>
@@ -807,9 +807,9 @@ export default function App() {
         </div>
 
         {/* Text Log Console */}
-        <div className="flex-1 min-h-[250px] max-h-[40vh] sm:max-h-none overflow-y-auto mb-4 p-2 sm:p-4 border-2 border-gray-700 bg-black space-y-2 sm:space-y-3 relative">
-          <div className="absolute inset-0 scanlines z-0"></div>
-          <div className="relative z-10 space-y-3 sm:space-y-4">
+        <div className="flex-1 min-h-0 mb-4 p-2 sm:p-4 border-2 border-gray-700 bg-black relative overflow-hidden flex flex-col">
+          <div className="absolute inset-0 scanlines z-0 pointer-events-none"></div>
+          <div className="relative z-10 flex-1 overflow-y-auto space-y-3 sm:space-y-4 pr-1 sm:pr-2">
             {playerInfo.logs.map((log, i) => (
               <p key={i} className={`text-[10px] sm:text-xs md:text-sm leading-relaxed sm:leading-loose ${
                 log.type === 'action' ? 'text-white' :
@@ -825,7 +825,7 @@ export default function App() {
         </div>
 
         {/* Action Buttons */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3 mt-auto">
+        <div className="shrink-0 grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3 mt-auto">
           <button disabled={isModalOpen} onClick={handleWork} className="text-left text-[9px] sm:text-xs md:text-sm p-2 sm:p-3 border border-gray-500 hover:bg-white hover:text-black transition-colors w-full disabled:opacity-50 disabled:cursor-not-allowed">
             [ 1 ] Work: {char.workNoun} <span className="text-gray-400 text-[8px]">(Takes 1 Day)</span>
           </button>
@@ -859,7 +859,7 @@ export default function App() {
     if (playerInfo.housingIndex === 2) scorePhrase = "You became a very successful settler and helped shape the great city of San Francisco!";
 
     return (
-      <div className="flex flex-col h-full items-center justify-center space-y-4 sm:space-y-6 text-center max-w-3xl mx-auto pb-10 px-2 overflow-y-auto">
+      <div className="flex flex-col h-full min-h-0 overflow-y-auto items-center justify-center space-y-4 sm:space-y-6 text-center max-w-3xl mx-auto pb-10 px-2">
         <h2 className="text-2xl sm:text-3xl md:text-5xl text-yellow-400 mb-2 mt-4 sm:mt-8">Time is up!</h2>
         
         <div className="p-4 sm:p-6 border-2 sm:border-4 border-white space-y-4 sm:space-y-6 bg-gray-900 w-full text-left">
@@ -894,13 +894,13 @@ export default function App() {
   return (
     <>
       <style>{PIXEL_FONT}</style>
-      <div className="min-h-screen bg-black text-white font-pixel p-1 sm:p-4 md:p-8 selection:bg-white selection:text-black">
-        <div className="max-w-5xl mx-auto border-2 sm:border-4 md:border-8 border-gray-800 rounded-lg sm:rounded-3xl p-1 sm:p-2 md:p-4 bg-gray-900 shadow-[0_0_20px_rgba(0,0,0,0.8)] sm:shadow-[0_0_50px_rgba(0,0,0,0.8)] w-full flex flex-col min-h-[95vh] sm:min-h-[85vh]">
-          <div className="flex-1 rounded-md sm:rounded-xl border border-gray-700 bg-black p-2 sm:p-4 md:p-6 flex flex-col relative overflow-x-hidden">
+      <div className="h-[100dvh] w-full bg-black text-white font-pixel p-1 sm:p-4 md:p-8 selection:bg-white selection:text-black flex flex-col">
+        <div className="max-w-5xl mx-auto border-2 sm:border-4 md:border-8 border-gray-800 rounded-lg sm:rounded-3xl p-1 sm:p-2 md:p-4 bg-gray-900 shadow-[0_0_20px_rgba(0,0,0,0.8)] sm:shadow-[0_0_50px_rgba(0,0,0,0.8)] w-full flex-1 flex flex-col min-h-0">
+          <div className="flex-1 rounded-md sm:rounded-xl border border-gray-700 bg-black p-2 sm:p-4 md:p-6 flex flex-col relative overflow-hidden min-h-0">
             
             {gameState !== 'title' && renderHeader()}
             
-            <div className="flex-1 flex flex-col z-10 relative">
+            <div className="flex-1 flex flex-col z-10 relative min-h-0">
               {gameState === 'title' && renderTitle()}
               {gameState === 'select' && renderSelect()}
               {gameState === 'wealth' && renderWealthRoll()}
